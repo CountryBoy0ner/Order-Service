@@ -1,4 +1,4 @@
-package com.innowise.OrderService.Service;
+package com.innowise.OrderService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
