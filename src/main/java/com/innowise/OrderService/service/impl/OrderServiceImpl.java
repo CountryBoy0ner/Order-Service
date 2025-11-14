@@ -39,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setUserId(userDto.getId());
-        order.setStatus(request.getStatus());              // дефолт/из запроса
+        order.setStatus(request.getStatus());
         order.setCreationDate(LocalDateTime.now());
 
         List<OrderItem> orderItems = request.getItems().stream()
