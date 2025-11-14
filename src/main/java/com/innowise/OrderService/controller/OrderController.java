@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
@@ -40,5 +42,23 @@ public class OrderController {
     public ResponseEntity<OrderWithUserDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getByIdWithUser(id));
     }
+    @GetMapping(params = "ids")
+    public ResponseEntity<List<OrderWithUserDto>> getByIds(
+            @RequestParam List<Long> ids) {
+        return ResponseEntity.ok(orderService.getByIdsWithUser(ids));
+    }
+
+    @GetMapping(params = "status")
+    public ResponseEntity<List<OrderWithUserDto>> getByStatus(
+            @RequestParam String status) {
+        return ResponseEntity.ok(orderService.getAllByStatus(status));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        orderService.deleteById(id);
+        return ResponseEntity.noContent().build();  // 204 NO CONTENT
+    }
+
 }
 
