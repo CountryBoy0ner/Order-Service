@@ -10,9 +10,14 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByStatus(String status);
+
     List<Order> findAllByIdIn(List<Long> ids);
+
     @Modifying
     @Query("UPDATE Order o SET o.status = :status WHERE o.id = :id")
     void updateStatusById(@Param("id") Long id, @Param("status") String status);
 
+    @Modifying
+    @Query("UPDATE Order o SET o.status = :status WHERE o.id = :id")
+    void updateOrderById(Long id, Order order);
 }
