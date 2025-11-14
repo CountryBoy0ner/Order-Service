@@ -5,9 +5,23 @@ import lombok.Data;
 @Data
 public class OrderPatchRequest {
 
-    // всё ОПЦИОНАЛЬНО, никаких @NotNull/@NotBlank
     private Long userId;
     private String status;
-    // можно добавить что-то ещё, если разрешаешь
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
 

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class CustomExceptionHandler {
 
     @ExceptionHandler({NotFoundException.class, EntityNotFoundException.class, NoHandlerFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleNotFound(Exception ex, HttpServletRequest req) {
         return build(HttpStatus.NOT_FOUND, ex.getMessage(), req);
     }
