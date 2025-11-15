@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderController {
 
 
-    private  OrderService orderService;
+    private final OrderService orderService;
 
     @PostMapping
     public ResponseEntity<OrderWithUserDto> create(
@@ -44,6 +44,7 @@ public class OrderController {
     public ResponseEntity<OrderWithUserDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getByIdWithUser(id));
     }
+
     @GetMapping(params = "ids")
     public ResponseEntity<List<OrderWithUserDto>> getByIds(
             @RequestParam List<Long> ids) {
