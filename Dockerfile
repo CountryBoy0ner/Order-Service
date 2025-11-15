@@ -15,7 +15,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/Order-Service-0.0.1-SNAPSHOT.jar app.jar
 
-COPY .env .env
 
 EXPOSE 8083
 

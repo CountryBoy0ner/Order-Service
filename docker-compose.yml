@@ -1,11 +1,12 @@
-version: "3.9"
+version: "3.8"
 
 services:
   db:
     image: postgres:16-alpine
     container_name: order-service-db
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: OrderServiceDb
+      POSTGRES_DB: orders
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
     ports:
@@ -14,18 +15,14 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   app:
+    image: order-service:latest
     container_name: order-service-app
-    build:
-      context: .
-      dockerfile: Dockerfile
     depends_on:
       - db
     ports:
       - "8083:8083"
-    environment:
-      DB_URL: jdbc:postgresql://db:5432/OrderServiceDb
-      DB_USERNAME: postgres
-      DB_PASSWORD: 123
+    env_file:
+      - .env
 
 volumes:
   pgdata:
