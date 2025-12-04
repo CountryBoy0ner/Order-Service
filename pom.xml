@@ -39,7 +39,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Lombok только на компиляцию -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -47,7 +46,6 @@
             <scope>compileOnly</scope>
         </dependency>
 
-        <!-- Lombok как annotation processor -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
