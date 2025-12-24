@@ -23,7 +23,7 @@ public class UserClientImpl implements UserClient {
         try {
             return restTemplate.getForObject(url, UserDto.class);
         } catch (HttpClientErrorException.NotFound ex) {
-            throw new NotFoundException("User" + "id" + id);
+            throw new NotFoundException("User with " + "id - " + id+ "not found");
         }
     }
 

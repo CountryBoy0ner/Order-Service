@@ -107,6 +107,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderWithUserDto update(Long orderId, OrderUpdateRequest request) {
         Order existing = repository.findById(orderId)
                 .orElseThrow(() -> NotFoundException.of("Order", "id", orderId));
+
         existing.setUserId(request.getUserId());
         existing.setStatus(request.getStatus());
 
