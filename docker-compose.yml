@@ -13,11 +13,13 @@ services:
       - "5434:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - innowise-micro-net
 
   app:
     build: .
     image: order-service:latest
-    container_name: order-service-app
+    container_name: order-service
     depends_on:
       - db
     ports:
@@ -25,7 +27,13 @@ services:
     env_file:
       - .env
     environment:
-      USER_SERVICE_BASE_URL: http://host.docker.internal:8081/api/users
+      USER_SERVICE_BASE_URL: "http://user-service:8080/api/users"
+    networks:
+      - innowise-micro-net
 
 volumes:
   pgdata:
+
+networks:
+  innowise-micro-net:
+    external: true
