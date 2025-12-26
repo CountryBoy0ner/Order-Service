@@ -8,6 +8,7 @@ import com.innowise.OrderService.dto.request.OrderUpdateRequest;
 import com.innowise.OrderService.dto.request.OrderPatchRequest;
 import com.innowise.OrderService.excepion.type.BadRequestException;
 import com.innowise.OrderService.excepion.type.NotFoundException;
+import com.innowise.OrderService.kafka.producer.OrderEventProducer;
 import com.innowise.OrderService.mapper.OrderMapper;
 import com.innowise.OrderService.model.Item;
 import com.innowise.OrderService.model.Order;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+    private final OrderEventProducer orderEventProducer;
     private final OrderRepository repository;
     private final ItemRepository itemRepository;
     private final OrderMapper mapper;
@@ -58,6 +61,21 @@ public class OrderServiceImpl implements OrderService {
 
         order.setOrderItems(orderItems);
         Order saved = repository.save(order);
+        BigDecimal total = orderItems.stream()
+                .map(oi -> BigDecimal.valueOf(oi.getItem().getPrice())
+                        .multiply(BigDecimal.valueOf(oi.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        orderEventProducer.sendCreateOrder(
+                new com.innowise.OrderService.kafka.event.CreateOrderEvent(
+                        saved.getId(),
+                        saved.getUserId(),
+                        saved.getStatus(),
+                        saved.getCreationDate(),
+                        total
+                )
+        );
+
         OrderDto orderDto = mapper.toDto(saved);
         return new OrderWithUserDto(orderDto, userDto);
     }

@@ -25,7 +25,6 @@ public class Order {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    // 👇 Связь с order_items
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 }
