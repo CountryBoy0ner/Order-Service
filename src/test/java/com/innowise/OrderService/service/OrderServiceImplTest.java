@@ -1,4 +1,4 @@
-package com.innowise.OrderService;
+package com.innowise.OrderService.service;
 
 
 import com.innowise.OrderService.dto.OrderDto;
@@ -15,7 +15,8 @@ import com.innowise.OrderService.model.Item;
 import com.innowise.OrderService.model.Order;
 import com.innowise.OrderService.repository.ItemRepository;
 import com.innowise.OrderService.repository.OrderRepository;
-import com.innowise.OrderService.service.UserClient;
+import com.innowise.OrderService.kafka.producer.OrderEventProducer;
+import com.innowise.OrderService.kafka.event.CreateOrderEvent;
 import com.innowise.OrderService.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
+
+    @Mock
+    private OrderEventProducer orderEventProducer;
 
     @Mock
     private OrderRepository orderRepository;
@@ -97,6 +101,10 @@ class OrderServiceImplTest {
         req.setUserId(userId);
         req.setStatus("NEW");
 
+
+        doNothing().when(orderEventProducer).sendCreateOrder(any(CreateOrderEvent.class));
+
+
         OrderItemCreateRequest reqItem = new OrderItemCreateRequest();
         reqItem.setItemId(itemId);
         reqItem.setQuantity(2);
@@ -125,6 +133,8 @@ class OrderServiceImplTest {
         verify(itemRepository).findById(itemId);
         verify(orderRepository).save(any(Order.class));
         verify(orderMapper).toDto(saved);
+        verify(orderEventProducer).sendCreateOrder(any(CreateOrderEvent.class));
+
     }
 
     @Test
