@@ -75,7 +75,7 @@ class OrderControllerIT {
     void createOrder_and_getById_withUserInfo() throws Exception {
         Item item = new Item();
         item.setName("Test item");
-        item.setPrice(10.0);   // Double, как в твоей сущности
+        item.setPrice(10.0);
         item = itemRepository.save(item);
         Long itemId = item.getId();
 
