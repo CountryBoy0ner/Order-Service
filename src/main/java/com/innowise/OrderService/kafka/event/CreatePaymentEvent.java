@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePaymentEvent {
-    private Long paymentId;
+    private String paymentId;
     private Long orderId;
     private Long userId;
     private String status;
