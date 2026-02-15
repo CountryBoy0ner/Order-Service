@@ -14,5 +14,6 @@ public class UserDto {
     private String surname;
     private LocalDate birthDate;
     private String email;
+    private boolean available;
 }
 

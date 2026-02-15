@@ -17,6 +17,7 @@ import com.innowise.OrderService.repository.ItemRepository;
 import com.innowise.OrderService.repository.OrderRepository;
 import com.innowise.OrderService.service.OrderService;
 import com.innowise.OrderService.service.UserClient;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderWithUserDto create(OrderCreateRequest request) {
         UserDto userDto = userClient.getById(request.getUserId());
+
 
         Order order = new Order();
         order.setUserId(userDto.getId());
@@ -92,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OrderWithUserDto> getByIdsWithUser(List<Long> ids) {
+    public List<OrderWithUserDto> getByIdsWithUser(List<Long> ids) { //todo
         List<Order> orders = repository.findAllByIdIn(ids);
         if (orders.isEmpty()) {
             throw NotFoundException.of("Orders", "ids", ids);
@@ -107,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OrderWithUserDto> getAllByStatus(String status) {
+    public List<OrderWithUserDto> getAllByStatus(String status) { //todo
         List<Order> orders = repository.findAllByStatus(status);
         if (orders.isEmpty()) {
             throw NotFoundException.of("Orders", "status", status);
@@ -168,4 +170,6 @@ public class OrderServiceImpl implements OrderService {
         }
         repository.deleteById(id);
     }
+
+
 }
