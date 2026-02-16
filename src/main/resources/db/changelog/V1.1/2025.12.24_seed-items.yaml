@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4-seed-items
+      author: admin
+      changes:
+        - insert:
+            tableName: items
+            columns:
+              - column: { name: id, valueNumeric: 1 }
+              - column: { name: name, value: "banana" }
+              - column: { name: price, valueNumeric: 9.99 }
+        - insert:
+            tableName: items
+            columns:
+              - column: { name: id, valueNumeric: 2 }
+              - column: { name: name, value: "apple" }
+              - column: { name: price, valueNumeric: 19.99 }
+
+        - insert:
+            tableName: items
+            columns:
+              - column: { name: id, valueNumeric: 3 }
+              - column: { name: name, value: "tomato" }
+              - column: { name: price, valueNumeric: 19.99 }
+
+        - sql:
+            sql: >
+              SELECT setval(
+                pg_get_serial_sequence('items','id'),
+                (SELECT COALESCE(MAX(id), 0) FROM items)
+              );
