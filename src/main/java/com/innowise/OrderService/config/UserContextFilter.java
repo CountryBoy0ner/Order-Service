@@ -25,35 +25,10 @@ public class UserContextFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String userId = request.getHeader("X-User-Id");
-        String username = request.getHeader("X-Username");
-        String rolesHeader = request.getHeader("X-Roles");
-
-        if (userId == null || username == null || rolesHeader == null) {
+        if (request.getHeader("X-User-Id") == null || request.getHeader("X-Roles") == null) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return;
         }
-
-        List<SimpleGrantedAuthority> authorities =
-                Stream.of(rolesHeader.split(","))
-                        .map(String::trim)
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
-        CustomUser principal = new CustomUser(
-                username,
-                Long.parseLong(userId),
-                authorities
-        );
-
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(
-                        principal,
-                        null,
-                        authorities
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }
